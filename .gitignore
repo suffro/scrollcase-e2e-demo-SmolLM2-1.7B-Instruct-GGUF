@@ -1,0 +1,11 @@
+# local planning notes, never committed
+.local-memory
+
+# scrollcase build state
+.scrollcase
+
+# Optional local consumer dependencies.
+node_modules/
+/.venv/
+/__pycache__/
+*.py[cod]

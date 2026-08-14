@@ -1,2 +1,12 @@
-# Auto detect text files and perform LF normalization
 * text=auto
+
+*.sh   text eol=lf
+*.json text eol=lf
+
+# Copied into the box verbatim. The scroll does not pin their hashes, but if you
+# add a `sha256` to a `localFiles` entry it covers the file's exact bytes — and a
+# checkout that rewrote a line ending would then fail the build on a tree that
+# looks clean. Keeping these out of line-ending conversion avoids that entirely.
+entrypoint.py   -text
+MODEL_NOTICE.md -text
+APACHE-2.0.txt  -text
