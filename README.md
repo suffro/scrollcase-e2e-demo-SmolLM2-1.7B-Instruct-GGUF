@@ -25,17 +25,17 @@ npm install -g scrollcase
 `init` creates the workspace, then asks one question:
 
 ```sh
-scrollcase init --no-example
+scrollcase init
 ```
 
 | It asks | Answer |
 | --- | --- |
-| This project needs pixi and conda-pack to build a box.<br>Install them into …/.scrollcase/toolchain? [Y/n] | `Y` (just press Enter) |
+| This project needs pixi and conda-pack to build a box.<br>Install them into …/.scrollcase/toolchain? [Y/n] | `n` |
+| Include the runnable example?<br>A disposable example-box scroll and consumer templates for trying the workflow: [Y/n] | `Y` (just press Enter) |
 
 ---
 
-That is the only prompt here. `--no-example` skips the disposable sample box — you are packaging a
-real model instead — and the questions about the Node, Python and Rust consumer templates come with
+That is the only prompt here. Answer no to the question about including the sample box example — you don't need it, we are packaging a real model — and the questions about the Node, Python and Rust consumer templates come with
 that sample, so they do not appear either.
 
 > Both tools land **inside the project**, under `.scrollcase/toolchain/`. Nothing is installed
