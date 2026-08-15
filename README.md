@@ -326,8 +326,15 @@ into it leaves the box.
 
 ## How to run the box
 
-There are 3 ways to run a Scrollcase box. Your prompt goes after `--` — and if you leave it out
-entirely, the box opens a [chat](#chat-with-it) instead:
+There are 3 ways to run a Scrollcase box, and in all three the box has **two modes**, decided by
+whether you give it something to answer:
+
+| You run | You get |
+| --- | --- |
+| `… *.release.json -- your question` | **one-shot** — it loads, answers once, exits |
+| `… *.release.json` — nothing after it | a [chat](#chat-with-it) — one load, many turns |
+
+So the one-shot form is the `--` one, and it is the form to use in a script, a pipeline or CI:
 
 ### a. Scrollcase CLI
 
@@ -418,14 +425,47 @@ clean alternation and the next answer is not conditioned on a question the model
 The answer appears all at once rather than word by word, after a `generating …` line — this is CPU
 inference, so expect tens of seconds for a long answer.
 
+### Driving the chat from a file
+
 And the same split as before still holds: **only answers go to stdout.** The `>` prompt, the
-timings and the notices are all stderr, so this works and gives you a file of nothing but answers:
+timings and the notices are all stderr — so the chat can be fed from a file instead of a keyboard,
+and what you get back is a file of nothing but answers:
+
+```sh
+scrollcase run .scrollcase/dist/boxes/llm-demo/1.0.0/linux-x86_64-cpu/*.release.json \
+  < questions.txt > answers.txt
+```
+
+**One line of `questions.txt` is one turn, and it is still one conversation** — the history is kept
+between the lines exactly as if you had typed them, so a line may refer to the one before it. The
+end of the file is read as Ctrl-D: the session ends and the box exits 0. There is no terminal
+involved, and no `--chat` flag was needed to get here — it is the same "no arguments" rule as above.
+
+For two questions and no file worth creating, `printf` writes them straight into the pipe, where
+each `\n` ends a turn:
 
 ```sh
 printf 'name three primary colours\nnow name three secondary ones\n' \
   | scrollcase run .scrollcase/dist/boxes/llm-demo/1.0.0/linux-x86_64-cpu/*.release.json \
   > answers.txt
 ```
+
+The second question is the point of the example: it names no colours and no subject, and it is
+answerable only because the first one is still in the conversation.
+
+**If you want the questions answered independently, this is the wrong tool** — a chat is a chat.
+Use the one-shot form once per question instead, and each answer starts from nothing:
+
+```sh
+while IFS= read -r question; do
+  scrollcase run .scrollcase/dist/boxes/llm-demo/1.0.0/linux-x86_64-cpu/*.release.json \
+    -- "$question" < /dev/null
+done < questions.txt > answers.txt
+```
+
+(`< /dev/null` on the inner command so it cannot eat the question list the loop is reading.) That
+version reloads the weights for every question; the chat pays that once. Which one you want depends
+on whether your questions are a conversation or a list.
 
 > **The self-test did not become interactive.** It still calls `generate()` and still asks one
 > question, because what it has to prove at build time is that a gigabyte of weights loads and
