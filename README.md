@@ -30,13 +30,12 @@ scrollcase init
 
 | It asks | Answer |
 | --- | --- |
-| Include the runnable example?<br>A disposable example-box scroll and consumer templates for trying the workflow: [Y/n] | `Y` (just press Enter) |
-| This project needs pixi and conda-pack to build a box.<br>Install them into …/.scrollcase/toolchain? [Y/n] | `n` |
+| Include the runnable example?<br>A disposable example-box scroll and consumer templates for trying the workflow: [Y/n] | `n` |
+| This project needs pixi and conda-pack to build a box.<br>Install them into …/.scrollcase/toolchain? [Y/n] | `Y` (just press Enter) |
 
 ---
 
-That is the only prompt here. Answer `n` (no) to the question about including the sample box example — you don't need it, we are packaging a real model — and the questions about the Node, Python and Rust consumer templates come with
-that sample, so they do not appear either.
+These are the only 2 prompts here. Answer `n` (no) to the question about including the sample box example — you don't need it, we are packaging a real model.
 
 > Both tools land **inside the project**, under `.scrollcase/toolchain/`. Nothing is installed
 > system-wide and nothing is added to `PATH`; deleting that directory undoes it.
